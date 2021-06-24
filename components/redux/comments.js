@@ -7,7 +7,9 @@ export const comments = (state = { errMess: null, comments: [] }, action) => {
 
         case ActionTypes.COMMENTS_FAILED:
             return { ...state, errMess: action.payload };
-
+        case ActionTypes.UPV_COMMENTS:
+            return { upv: upv++ }
+    
         default:
             return state;
     }

@@ -32,6 +32,10 @@ export const addComments = comments => ({
     payload: comments
 });
 
+export const upVote = () => ({
+    type: ActionTypes.UPV_COMMENTS,
+});
+
 export const fetchCampsites = () => dispatch => {
 
     dispatch(campsitesLoading());

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Text, View, ScrollView, FlatList } from 'react-native';
-import { Card, Icon } from 'react-native-elements';
+import { Card, Icon, Button } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { baseUrl } from '../shared/baseUrl';
 const mapStateToProps = state => {
@@ -11,6 +11,7 @@ const mapStateToProps = state => {
 }
 
 function RenderCampsite(props) {
+
 
     const { campsite } = props;
 
@@ -37,7 +38,7 @@ function RenderCampsite(props) {
     return <View />
 }
 
-function RenderComments({ comments }) {
+function RenderComments({ comments, increment }) {
 
     const renderCommentItem = ({ item }) => {
         return (
@@ -45,6 +46,19 @@ function RenderComments({ comments }) {
                 <Text style={{ fontSize: 14 }}>{item.text}</Text>
                 <Text style={{ fontSize: 12 }}>{item.rating} Stars</Text>
                 <Text style={{ fontSize: 12 }}>{`-- ${item.author}, ${item.date}`}</Text>
+                <Text style={{ fontSize: 12 }}>{item.upv}</Text>
+
+
+
+                <Icon
+                    name='Arrow'
+                    type='font-awesome'
+                    color='#f50'
+                    raised
+                    reverse
+                    onPress={increment}
+                />
+
             </View>
         );
     };
@@ -82,19 +96,26 @@ class CampsiteInfo extends Component {
         }
 
     }
+    increment = () => {
+        this.props.dispatch({ type: 'UPV_COMMENT' });
+    }
+
+
 
     render() {
 
         const campsiteId = this.props.navigation.getParam('campsiteId');
         const campsite = this.props.campsites.campsites.filter(campsite => campsite.id === campsiteId)[0];
         const comments = this.props.comments.comments.filter(comment => comment.campsiteId === campsiteId);
+        console.log(5555555555, comments[0].upv);
         return (
             <ScrollView>
                 <RenderCampsite campsite={campsite}
                     favorite={this.state.favorite}
                     markFavorite={() => this.markFavorite()}
                 />
-                <RenderComments comments={comments} />
+                <RenderComments comments={comments}
+                    increment={this.increment} />
             </ScrollView>
         );
     }
