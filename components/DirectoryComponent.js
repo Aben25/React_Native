@@ -25,7 +25,7 @@ class Directory extends Component {
                     caption={item.description}
                     featured
                     onPress={() => navigate('CampsiteInfo', { campsiteId: item.id })}
-                    imageSrc={{uri: baseUrl + item.image}}
+                    imageSrc={{ uri: baseUrl + item.image }}
                 />
             );
         };
@@ -40,8 +40,8 @@ class Directory extends Component {
             );
         }
         return (
-           
-                <FlatList
+
+            <FlatList
                 data={this.props.campsites.campsites}
                 renderItem={renderDirectoryItem}
                 keyExtractor={item => item.id.toString()}
