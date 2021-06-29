@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Text, View, ScrollView, StyleSheet,
-    Picker, Switch, Button } from 'react-native';
+    Picker, Switch, Button, Modal } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
 class Reservation extends Component {
@@ -21,8 +21,15 @@ class Reservation extends Component {
     toggleModal() {
         this.setState({showModal: !this.state.showModal});
     }
-
+   
+    
     handleReservation() {
+        this.setState({
+            campers: 1,
+            hikeIn: false,
+            date: new Date(),
+            showCalendar: false     
+        });
         console.log(JSON.stringify(this.state));
         this.toggleModal();
     }
@@ -35,6 +42,8 @@ class Reservation extends Component {
             showCalendar: false,
             showModal: false
         });
+        console.log(JSON.stringify(this.state));
+        this.toggleModal();
     }
 
     render() {
