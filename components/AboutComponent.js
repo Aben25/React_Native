@@ -6,6 +6,8 @@ import { FlatList } from 'react-native';
 import { ListItem } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { baseUrl } from '../shared/baseUrl';
+import * as Animatable from 'react-native-animatable';
+
 const mapStateToProps = state => {
     return {
         partners: state.partners
@@ -34,39 +36,47 @@ class AboutUs extends Component {
                 </Card>
             )
         }
-        const renderPartner = ({item}) => {
+        const renderPartner = ({ item }) => {
             return (
                 <ListItem
                     title={item.name}
                     subtitle={item.description}
-                    leftAvatar={{source: {uri: baseUrl + item.image}}}
+                    leftAvatar={{ source: { uri: baseUrl + item.image } }}
                 />
             );
         };
         if (this.props.partners.isLoading) {
             return (
+
                 <ScrollView>
-                    <Mission />
-                    <Card
-                        title='Community Partners'>
-                        <Loading />
-                    </Card>
+                    <Animatable.View animation='fadeInDown' duration={2000} delay={1000}>
+                        <Mission />
+                        <Card
+                            title='Community Partners'>
+                            <Loading />
+                        </Card>
+                    </Animatable.View>
+
                 </ScrollView>
             );
         }
         if (this.props.partners.errMess) {
             return (
                 <ScrollView>
+                    <Animatable.View animation='fadeInDown' duration={2000} delay={1000}>
                     <Mission />
                     <Card
                         title='Community Partners'>
                         <Text>{this.props.partners.errMess}</Text>
-                    </Card>
+                        </Card>
+                        </Animatable.View>
                 </ScrollView>
             );
         }
         return (
             <ScrollView>
+                <Animatable.View animation='fadeInDown' duration={2000} delay={1000}>
+                
                 <Mission />
 
                 <Card
@@ -78,7 +88,8 @@ class AboutUs extends Component {
                         renderItem={renderPartner}
                         keyExtractor={item => item.id.toString()}
                     />
-                </Card>
+                    </Card>
+                    </Animatable.View>
             </ScrollView>
         )
     }

@@ -4,6 +4,7 @@ import { Card, Icon, Rating, Input, keyboardType, TextInput } from 'react-native
 import { connect } from 'react-redux';
 import { postComment } from './redux/ActionCreators';
 import { postFavorite } from './redux/ActionCreators';
+import * as Animatable from 'react-native-animatable';
 
 
 const mapStateToProps = state => {
@@ -25,6 +26,8 @@ function RenderCampsite(props) {
 
     if (campsite) {
         return (
+            <Animatable.View animation='fadeInDown' duration={2000} delay={1000}>
+
             <Card
                 featuredTitle={campsite.name}
                 image={require('./images/react-lake.jpg')}>
@@ -53,7 +56,9 @@ function RenderCampsite(props) {
 
                 </View>
 
-            </Card>
+                </Card>
+                </Animatable.View>
+
         );
     }
     return <View />
@@ -63,6 +68,8 @@ function RenderComments({ comments, increment }) {
 
     const renderCommentItem = ({ item }) => {
         return (
+            <Animatable.View animation='fadeInUp' duration={2000} delay={1000}>
+
             <View style={{ margin: 10 }}>
                 <Text style={{ fontSize: 14 }}>{item.text}</Text>
 
@@ -90,7 +97,9 @@ function RenderComments({ comments, increment }) {
                
 
 
-            </View>
+                </View>
+                </Animatable.View>
+
         );
     };
 
