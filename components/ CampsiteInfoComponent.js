@@ -1,12 +1,14 @@
 import React, { Component, createRef } from 'react';
-import { Text, View, ScrollView, FlatList, StyleSheet, Switch, Button, Modal, Alert, PanResponder } from 'react-native';
+import {   Switch } from 'react-native';
 import { Card, Icon, Rating, Input, keyboardType, TextInput } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { postComment } from './redux/ActionCreators';
 import { postFavorite } from './redux/ActionCreators';
 import * as Animatable from 'react-native-animatable';
-
-
+import { Text, View, ScrollView, FlatList,
+    Modal, Button, StyleSheet,
+    Alert, PanResponder, Share } from 'react-native';
+    
 const mapStateToProps = state => {
     return {
         campsites: state.campsites,
@@ -17,20 +19,32 @@ const mapStateToProps = state => {
 const mapDispatchToProps = {
     postFavorite: campsiteId => (postFavorite(campsiteId))
 };
-
-
 function RenderCampsite(props) {
+
+    const shareCampsite = (title, message, url) => {
+        Share.share({
+            title: title,
+            message: `${title}: ${message} ${url}`,
+            url: url
+        },{
+            dialogTitle: 'Share ' + title
+        });
+    };
 
 
     const { campsite } = props;
+
+
     const view = createRef();
     const recognizeDrag = ({ dx }) => (dx < -200) ? true : false;
-        const panResponder = PanResponder.create({
-            onStartShouldSetPanResponder: () => true,
-            onPanResponderGrant: () => {
-                view.current.rubberBand(1000)
+    const recognizeComment = ({ moveX }) => (moveX < 200) ? true : false;
+
+    const panResponder = PanResponder.create({
+        onStartShouldSetPanResponder: () => true,
+        onPanResponderGrant: () => {
+            view.current.rubberBand(1000)
                 .then(endState => console.log(endState.finished ? 'finished' : 'canceled'));
-            },
+        },
         onPanResponderEnd: (e, gestureState) => {
             console.log('pan responder end', gestureState);
             if (recognizeDrag(gestureState)) {
@@ -51,21 +65,20 @@ function RenderCampsite(props) {
                     ],
                     { cancelable: false }
                 );
+            } else if (recognizeComment(gestureState)) {
+                props.onShowModal()
             }
             return true;
         }
     });
-
-
-
 
     if (campsite) {
         return (
             <Animatable.View
                 animation='fadeInDown'
                 duration={2000}
-                ref={view}
                 delay={1000}
+                ref={view}
                 {...panResponder.panHandlers}>
                 <Card
                     featuredTitle={campsite.name}
@@ -91,6 +104,14 @@ function RenderCampsite(props) {
                             raised
                             reverse
                             onPress={() => props.onShowModal()}
+                        />
+                        <Icon
+                            name={'share'}
+                            type='font-awesome'
+                            color='#5637DD'
+                            raised
+                            reverse
+                            onPress={() => shareCampsite(campsite.name, campsite.description, baseUrl + campsite.image)} 
                         />
 
                     </View>
@@ -205,6 +226,7 @@ class CampsiteInfo extends Component {
                 <RenderCampsite campsite={campsite}
                     favorite={this.props.favorites.includes(campsiteId)}
                     markFavorite={() => this.markFavorite(campsiteId)}
+                    onShowModal={() => this.toggleModal()}
                 />
                 <RenderComments comments={comments}
                     increment={this.increment}
